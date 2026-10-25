@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIGAS — Smart Integrated Gas Security | Autonomous LPG Leak Mitigation</title>
+  <meta name="description" content="SIGAS (Smart Integrated Gas Security): Perangkat robotik IoT non-invasif pemutus regulator LPG 3kg mandiri dalam 15 detik untuk UMKM kuliner dan dapur keluarga.">
+  <meta name="keywords" content="SIGAS, kebocoran gas LPG, detektor gas otomatis, regulator LPG 3kg, ESP32, MQ-6, developerday.id 2026, APICTA">
+  
+  <!-- OpenGraph Metadata -->
+  <meta property="og:title" content="SIGAS — Smart Integrated Gas Security">
+  <meta property="og:description" content="Sistem proteksi mandiri kebocoran gas LPG dengan aktuator robotik non-invasif dan pemantauan IoT multi-unit.">
+  <meta property="og:image" content="/assets/images/sigas-logo-full.png">
+  <meta property="og:type" content="website">
+  
+  <!-- Favicon using official app icon -->
+  <link rel="icon" type="image/png" href="/assets/images/sigas-app-icon.png">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="/src/styles/index.css">
+</head>
+<body>
+
+  <!-- ========================================================================
+       TOP HEADER & NAVIGATION
+       ======================================================================== -->
+  <header class="site-nav" id="topNav">
+    <div class="container nav-container">
+      <div class="nav-logo-group">
+        <a href="#hero" class="nav-logo" aria-label="Beranda SIGAS">
+          <img src="/assets/images/sigas-logo-full.png" alt="Logo Resmi SIGAS" class="nav-logo-img">
+        </a>
+        <span class="nav-tag">TRL 6 PROTOTYPE</span>
+      </div>
+
+      <nav class="nav-menu" aria-label="Navigasi Utama">
+        <a href="#masalah" class="nav-link" data-i18n="nav.problem">Masalah Lapangan</a>
+        <a href="#solusi" class="nav-link" data-i18n="nav.solution">Solusi &amp; Cara Kerja</a>
+
+        <div class="nav-dropdown">
+          <button type="button" class="nav-link nav-drop-toggle" aria-haspopup="true" aria-expanded="false">
+            <span data-i18n="nav.product">Produk</span>
+            <svg class="nav-drop-caret" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+              <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="nav-drop-menu" role="menu">
+            <a href="#hardware" class="nav-drop-item" role="menuitem" data-i18n="nav.hardware">Hardware CAD</a>
+            <a href="#aplikasi" class="nav-drop-item" role="menuitem" data-i18n="nav.app">Aplikasi Flutter</a>
+            <a href="#spesifikasi" class="nav-drop-item" role="menuitem" data-i18n="nav.specs">Spesifikasi</a>
+            <a href="#keunggulan" class="nav-drop-item" role="menuitem" data-i18n="nav.advantages">Keunggulan</a>
+          </div>
+        </div>
+
+        <div class="nav-dropdown">
+          <button type="button" class="nav-link nav-drop-toggle" aria-haspopup="true" aria-expanded="false">
+            <span data-i18n="nav.business">Bisnis &amp; Tim</span>
+            <svg class="nav-drop-caret" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+              <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="nav-drop-menu" role="menu">
+            <a href="#bisnis" class="nav-drop-item" role="menuitem" data-i18n="nav.pricing">Biaya &amp; Model</a>
+            <a href="#tim" class="nav-drop-item" role="menuitem" data-i18n="nav.team">Tim Riset</a>
+          </div>
+        </div>
+      </nav>
+
+      <div class="nav-actions">
+        <!-- Language Switcher -->
+        <div class="lang-toggle" role="group" aria-label="Pilih Bahasa">
+          <button type="button" class="lang-btn active" id="lang-id">ID</button>
+          <button type="button" class="lang-btn" id="lang-en">EN</button>
+        </div>
+
+        <button type="button" class="btn btn--primary btn--sm" id="btnOpenConsultation" data-i18n="nav.cta">
+          Kontak Tim Peneliti
+        </button>
+
+        <!-- Mobile Hamburger Toggle -->
+        <button type="button" class="mobile-toggle" id="btnMobileToggle" aria-label="Buka Menu Navigasi" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer -->
+    <div class="mobile-drawer" id="mobileDrawer">
+      <a href="#masalah" class="nav-link mobile-link" data-i18n="nav.problem">Masalah Lapangan</a>
+      <a href="#solusi" class="nav-link mobile-link" data-i18n="nav.solution">Solusi &amp; Cara Kerja</a>
+      <a href="#hardware" class="nav-link mobile-link" data-i18n="nav.hardware">Hardware CAD</a>
+      <a href="#aplikasi" class="nav-link mobile-link" data-i18n="nav.app">Aplikasi Flutter</a>
+      <a href="#keunggulan" class="nav-link mobile-link" data-i18n="nav.advantages">Keunggulan</a>
+      <a href="#spesifikasi" class="nav-link mobile-link" data-i18n="nav.specs">Spesifikasi</a>
+      <a href="#bisnis" class="nav-link mobile-link" data-i18n="nav.pricing">Biaya &amp; Model</a>
+      <a href="#tim" class="nav-link mobile-link" data-i18n="nav.team">Tim Riset</a>
+      <button type="button" class="btn btn--primary" id="btnMobileConsultation" data-i18n="nav.cta">
+        Kontak Tim Peneliti
+      </button>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       HERO SECTION (KODAK SP360 + LIVENTO AESTHETIC)
+       ======================================================================== -->
+  <section class="hero" id="hero">
+    <!-- Giant Background Watermark (Kodak Style) -->
+    <div class="hero-watermark">SIGAS</div>
+
+    <div class="container hero-grid">
+      <div class="hero-content">
+        <div class="hero-badges">
+          <span class="badge-pill badge-pill--blue">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+            </svg>
+            <span data-i18n="hero.badge1">developerday.id 2026 • Road to APICTA</span>
+          </span>
+          <span class="badge-pill badge-pill--teal">
+            <span style="display:inline-block; width:7px; height:7px; border-radius:50%; background:currentColor;"></span>
+            <span data-i18n="hero.badge2">Dipasang Tanpa Merusak Pipa</span>
+          </span>
+        </div>
+
+        <h1 class="hero-title" data-i18n="hero.title">
+          Gas Bocor Saat Kios Tutup? <mark>Alat Ini Menutup Kerannya Otomatis</mark>
+        </h1>
+
+        <p class="hero-lead" data-i18n="hero.lead">
+          SIGAS dipasang mengapit keran gas LPG standar SNI tanpa memotong pipa atau selang. Begitu sensor mengenali gas bocor, keran diputar tertutup otomatis dalam waktu di bawah 15 detik — tetap bekerja walau listrik padam atau internet mati.
+        </p>
+
+        <div class="hero-cta-group">
+          <a href="#solusi" class="btn btn--primary" data-i18n="hero.ctaPrimary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+            Lihat Cara Kerjanya
+          </a>
+          <a href="#hardware" class="btn btn--secondary" data-i18n="hero.ctaSecondary">
+            Lihat Desain Alat
+          </a>
+        </div>
+      </div>
+
+      <!-- Hero Visual Showcase with Simulator -->
+      <div class="hero-visual">
+        <div class="hero-card">
+          <div class="hero-card-tag">MODEL 3D • PERANGKAT AKTUAL</div>
+
+          <div class="hero-img-wrap">
+            <img src="/assets/images/sigas-device-lpg3kg.png" alt="Render 3D SIGAS terpasang di atas tabung gas 3 kg melon">
+
+            <!-- Micro Callouts -->
+            <div class="hero-callout hero-callout--servo">
+              <div class="hero-callout-icon">M</div>
+              <div>
+                <div style="font-size:0.6875rem; color:var(--color-slate-500)">AKTUATOR</div>
+                <div>Servo Metal 20 kg·cm</div>
+              </div>
+            </div>
+
+            <div class="hero-callout hero-callout--sensor">
+              <div class="hero-callout-icon">S</div>
+              <div>
+                <div style="font-size:0.6875rem; color:var(--color-slate-500)">DETEKSI</div>
+                <div>MQ-6 10Hz Filter</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Live Telemetry Simulator -->
+          <div class="hero-simulator">
+            <div class="simulator-header">
+              <span class="simulator-title" data-i18n="sim.title">SIMULASI TELEMETRI KONTROL</span>
+              <div class="simulator-modes" role="tablist">
+                <button type="button" class="sim-btn active" data-mode="normal" role="tab" aria-selected="true" data-i18n="sim.normal">Normal</button>
+                <button type="button" class="sim-btn" data-mode="warning" role="tab" aria-selected="false" data-i18n="sim.warning">Waspada</button>
+                <button type="button" class="sim-btn" data-mode="danger" role="tab" aria-selected="false" data-i18n="sim.danger">Darurat</button>
+              </div>
+            </div>
+
+            <div class="simulator-display">
+              <div>
+                <div class="sim-metric-val" id="simPpmVal">71 PPM</div>
+                <div class="sim-metric-lbl" data-i18n="sim.ppm">Konsentrasi Gas LPG</div>
+              </div>
+              <div>
+                <div class="sim-metric-val" id="simValveVal" style="color: var(--color-safe);">MENGALIR</div>
+                <div class="sim-metric-lbl" data-i18n="sim.valve">Status Tuas Regulator</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       KODAK SP360-STYLE STATS BAR
+       ======================================================================== -->
+  <section class="specs-bar">
+    <div class="container specs-bar-grid">
+      <div class="specs-bar-item">
+        <div class="specs-bar-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+        </div>
+        <div class="specs-bar-val">&lt; 15 DETIK</div>
+        <div class="specs-bar-lbl" data-i18n="stats.time">Dari Tercium Gas Sampai Gas Terputus</div>
+      </div>
+
+      <div class="specs-bar-item">
+        <div class="specs-bar-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+          </svg>
+        </div>
+        <div class="specs-bar-val">20 KG·CM</div>
+        <div class="specs-bar-lbl" data-i18n="stats.torque">Kekuatan Motor Pemutar Keran Gas</div>
+      </div>
+
+      <div class="specs-bar-item">
+        <div class="specs-bar-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+        </div>
+        <div class="specs-bar-val">0 MODIFIKASI</div>
+        <div class="specs-bar-lbl" data-i18n="stats.pipe">Nol Pemotongan Pipa / Selang</div>
+      </div>
+
+      <div class="specs-bar-item">
+        <div class="specs-bar-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            <polyline points="2 17 12 22 22 17"></polyline>
+            <polyline points="2 12 12 17 22 12"></polyline>
+          </svg>
+        </div>
+        <div class="specs-bar-val">TRL 6</div>
+        <div class="specs-bar-lbl" data-i18n="stats.trl">Sudah Diuji di Kondisi Nyata</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       PROBLEM STATEMENT & FIELD EVIDENCE (PURWOKERTO SELATAN)
+       ======================================================================== -->
+  <section class="section section--alt" id="masalah">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-kicker" data-i18n="prob.kicker">FAKTA LAPANGAN &amp; MASALAH NYATA</span>
+        <h2 class="section-title" data-i18n="prob.title">Mengapa Detektor Konvensional Gagal Mencegah Kebakaran?</h2>
+        <p class="section-desc" data-i18n="prob.desc">
+          Berdasarkan survei dan wawancara lapangan pada UMKM kuliner di Purwokerto Selatan, bahaya gas LPG 3 kg bukan semata-mata api saat memasak, melainkan kebocoran senyap saat warung tutup malam hari.
+        </p>
+      </div>
+
+      <div class="problem-card-grid">
+        <div class="problem-card problem-card--highlight">
+          <div class="problem-stat">100%</div>
+          <h3 class="problem-title" data-i18n="prob.stat1Title">Pernah Mengalami Masalah Gas</h3>
+          <p class="problem-desc" data-i18n="prob.stat1Desc">
+            100% responden pedagang makanan pernah mencium bau gas bocor, karet sil tabung rusak/getas, atau klem selang yang longgar di kios sempit mereka.
+          </p>
+          <div class="problem-source">Sumber: Wawancara lapangan UMKM Purwokerto Selatan</div>
+        </div>
+
+        <div class="problem-card">
+          <div class="problem-stat">12–16 Jam</div>
+          <h3 class="problem-title" data-i18n="prob.stat2Title">Durasi Nyala Harian</h3>
+          <p class="problem-desc" data-i18n="prob.stat2Desc">
+            UMKM kuliner mengandalkan tabung 3 kg terus-menerus. Saat tutup malam hari, knop kompor dimatikan namun tuas regulator tetap tertekan dan bertekanan tinggi.
+          </p>
+          <div class="problem-source">Sumber: Studi beban kerja dapur kios</div>
+        </div>
+
+        <div class="problem-card">
+          <div class="problem-stat">Rp 19 Juta</div>
+          <h3 class="problem-title" data-i18n="prob.stat3Title">Risiko Kerugian per Kios</h3>
+          <p class="problem-desc" data-i18n="prob.stat3Desc">
+            Estimasi aset fisik pedagang (gerobak, peralatan masak, stok bahan) yang terancam musnah jika terjadi kebakaran, belum termasuk kerusakan kios tetangga.
+          </p>
+          <div class="problem-source">Sumber: Analisis risiko aset kuliner mikro</div>
+        </div>
+      </div>
+
+      <!-- Comparison Box -->
+      <div class="compare-box">
+        <div class="compare-grid">
+          <div class="compare-col compare-col--bad">
+            <span class="compare-badge compare-badge--bad">Detektor Gas Konvensional</span>
+            <h3 class="compare-heading">Alarm Pasif Berdengung di Ruangan Kosong</h3>
+            <ul class="compare-list">
+              <li>
+                <span class="compare-icon" style="color:#DC2626;">✕</span>
+                <span>Hanya mengeluarkan bunyi sirine di kios yang terkunci tanpa tindakan mitigasi fisik.</span>
+              </li>
+              <li>
+                <span class="compare-icon" style="color:#DC2626;">✕</span>
+                <span>Gas tetap mengalir keluar dari regulator yang bertekanan tinggi sepanjang malam.</span>
+              </li>
+              <li>
+                <span class="compare-icon" style="color:#DC2626;">✕</span>
+                <span>Konsentrasi gas mencapai batas ledak (LFL) hingga satu percikan kecil memicu ledakan.</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="compare-col compare-col--good">
+            <span class="compare-badge compare-badge--good">Inovasi Robotik SIGAS</span>
+            <h3 class="compare-heading">Mitigasi Mekanis Otomatis di Titik Hulu</h3>
+            <ul class="compare-list">
+              <li>
+                <span class="compare-icon" style="color:var(--color-accent);">✓</span>
+                <span>Aktuator servo fisik langsung memutar tuas regulator 90° dalam hitungan &lt;0.4 detik.</span>
+              </li>
+              <li>
+                <span class="compare-icon" style="color:var(--color-accent);">✓</span>
+                <span>Aliran gas langsung terputus dari mulut tabung, menghentikan rembesan gas seketika.</span>
+              </li>
+              <li>
+                <span class="compare-icon" style="color:var(--color-accent);">✓</span>
+                <span>Edge-Autonomous: bekerja offline tanpa ketergantungan sinyal internet atau listrik PLN.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       PROPOSED SOLUTION & HOW IT WORKS
+       ======================================================================== -->
+  <section class="section" id="solusi">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-kicker section-kicker--teal" data-i18n="sol.kicker">SOLUSI &amp; ALUR KERJA MANDIRI</span>
+        <h2 class="section-title" data-i18n="sol.title">Tiga Lapisan Perlindungan Robotik</h2>
+        <p class="section-desc" data-i18n="sol.desc">
+          SIGAS (Smart IoT Gas Autonomous Safety) dirancang non-invasif untuk memutus regulator LPG secara mandiri sebelum gas sempat menyulut api.
+        </p>
+      </div>
+
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-number">01</div>
+          <h3 class="step-title">Mencium Gas Bocor dalam Hitungan Detik</h3>
+          <p class="step-desc">
+            Sensor gas MQ-6 memantau udara 10 kali per detik. Algoritma filter rata-rata menyaring pembacaan palsu, misalnya asap bumbu masak, agar gas tidak dipotong secara keliru.
+          </p>
+          <span class="step-tag-pill">MQ-6 LPG SENSING</span>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">02</div>
+          <h3 class="step-title">Menutup Keran Sendiri, Tanpa Perlu Ditekan</h3>
+          <p class="step-desc">
+            Otak kecil perangkat ini (chip ESP32) memproses semuanya di dalam alat — bukan di server internet. Begitu kadar gas melewati ambang darurat (>400 PPM), keran langsung ditutup tanpa menunggu apa pun.
+          </p>
+          <span class="step-tag-pill">EDGE-AUTONOMOUS FIRMWARE</span>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">03</div>
+          <h3 class="step-title">Alarm Berbunyi &amp; HP Anda Dikirimi Peringatan</h3>
+          <p class="step-desc">
+            Sirine langsung aktif bersamaan dengan notifikasi ke smartphone pengelola. Putaran mekanis menutup regulator kuningan dalam waktu di bawah 0,4 detik — sebelum gas merambat lebih jauh.
+          </p>
+          <span class="step-tag-pill">TD8120MG METAL SERVO</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       HARDWARE ANATOMY & CAD SCHEMATICS (LIVENTO DARK BENTO & MELLO TEARDOWN)
+       ======================================================================== -->
+  <section class="section section--dark" id="hardware">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-kicker" data-i18n="hw.kicker">REKAYASA MEKANIK &amp; CAD</span>
+        <h2 class="section-title" data-i18n="hw.title">Anatomi Perangkat Keras SIGAS</h2>
+        <p class="section-desc" data-i18n="hw.desc">
+          SIGAS dipasang di leher tabung gas 3 kg seperti "gantungan kunci" besar — dijepit di luar, tanpa mencopot segel resmi regulator SNI. Lepas-pasang cukup pakai tangan, tanpa perkakas.
+        </p>
+      </div>
+
+      <div class="hardware-box">
+        <div class="hardware-grid">
+          <!-- CAD Technical Schematic -->
+          <div class="hardware-schematic-view">
+            <span class="schematic-tag">GAMBAR TEKNIK CAD ISOMETRIK</span>
+            <img src="/assets/images/cad-isometric-callouts.jpg" alt="Diagram CAD Isometrik SIGAS dengan anotasi komponen resmi">
+          </div>
+
+          <!-- Component Interactive Breakdown -->
+          <div class="components-list" id="componentList">
+            <div class="component-item active" data-comp="servo">
+              <div class="component-header">
+                <span class="component-name">Servo TD8120MG 20 kg·cm</span>
+                <span class="component-badge">AKTUASI UTAMA</span>
+              </div>
+              <p class="component-desc">
+                Motor servo waterproof bergigi logam penuh (metal gears) dengan daya puntir 20 kg·cm untuk memastikan tuas regulator kuningan yang keras dapat diputar 90° dengan andal.
+              </p>
+            </div>
+
+            <div class="component-item" data-comp="esp32">
+              <div class="component-header">
+                <span class="component-name">ESP32 DOIT DevKit V1</span>
+                <span class="component-badge">KONTROLER UTAMA</span>
+              </div>
+              <p class="component-desc">
+                Otak perangkat yang mengatur semuanya: membaca sensor gas, menjalankan jadwal tutup otomatis, dan mengirim data ke aplikasi lewat koneksi Wi-Fi.
+              </p>
+            </div>
+
+            <div class="component-item" data-comp="mq6">
+              <div class="component-header">
+                <span class="component-name">Sensor Gas LPG MQ-6</span>
+                <span class="component-badge">DETEKSI GAS TERKALIBRASI</span>
+              </div>
+              <p class="component-desc">
+                Sensor khusus gas LPG dengan sensitivitas tinggi. Dilengkapi filter agar tidak mudah "tewas" oleh asap dapur, sehingga alarm jarang salah bunyi.
+              </p>
+            </div>
+
+            <div class="component-item" data-comp="rtc">
+              <div class="component-header">
+                <span class="component-name">Pencatat Waktu &amp; Tanggal</span>
+                <span class="component-badge">JADWAL SHIFT OFFLINE</span>
+              </div>
+              <p class="component-desc">
+                Pom waktu presisi dengan baterai cadangan. Jadwal "matikan gas saat kios tutup" tetap tersimpan meski listrik padam total.
+              </p>
+            </div>
+
+            <div class="component-item" data-comp="casing">
+              <div class="component-header">
+                <span class="component-name">Casing Plug-On &amp; Lengan Ayun</span>
+                <span class="component-badge">100% NON-INVASIF</span>
+              </div>
+              <p class="component-desc">
+                Dudukan kejangkraman yang mencengkeram tuas regulator tanpa perkakas. Kejangkarkan dibebastaki seketika dengan tangan saja — keran regulator selalu tetap bisa diputar manual.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       MOBILE APP SHOWCASE (FLUTTER 3 ECOSYSTEM)
+       ======================================================================== -->
+  <section class="section" id="aplikasi">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-kicker" data-i18n="app.kicker">DASBOR DI HP ANDA</span>
+        <h2 class="section-title" data-i18n="app.title">Aplikasi SIGAS Kitchen Safety</h2>
+        <p class="section-desc" data-i18n="app.desc">
+          Aplikasi Android yang menampilkan kondisi gas dapur secara waktu-nyata: aman, waspada, atau darurat — lengkap dengan riwayat alarm. Teknisnya: Flutter 3 + Firebase.
+        </p>
+      </div>
+
+      <div class="app-showcase-grid">
+        <!-- Phone Device Frame with Real App Screens -->
+        <div class="app-phone-mockup">
+          <img src="/assets/images/app-screen-normal.jpg" alt="Tampilan Aplikasi SIGAS Kitchen Safety" class="phone-screen-img" id="phoneAppImg">
+        </div>
+
+        <!-- Interactive Screen Switchers -->
+        <div class="app-tabs">
+          <div class="app-tab-btn active" data-screen="normal">
+            <div class="app-tab-heading">
+              <span class="app-tab-title">1. Tampilan Kondisi Aman</span>
+              <span class="status-pill status-pill--safe">Aman (71 PPM)</span>
+            </div>
+            <p class="app-tab-desc">
+              Meter melingkar yang jernih menunjukkan kadar gas sekarang, ditemani suhu dan kelembapan dapur. Status keran gas sedang terbuka dan aman.
+            </p>
+          </div>
+
+          <div class="app-tab-btn" data-screen="warning">
+            <div class="app-tab-heading">
+              <span class="app-tab-title">2. Peringatan Dini Rembesan Gas</span>
+              <span class="status-pill status-pill--warn">Waspada (275 PPM)</span>
+            </div>
+            <p class="app-tab-desc">
+              Kalau ada rembesan gas — misalnya karet sil tabung yang getas atau klem selang yang mulai kendur — status peringatan muncul di aplikasi sebelum gas mencapai tingkat berbahaya.
+            </p>
+          </div>
+
+          <div class="app-tab-btn" data-screen="emergency">
+            <div class="app-tab-heading">
+              <span class="app-tab-title">3. Tanggap Darurat Otomatis</span>
+              <span class="status-pill status-pill--danger">Darurat (1.479 PPM)</span>
+            </div>
+            <p class="app-tab-desc">
+              Gas terdeteksi pekat (>400 PPM). Perangkat menutup keran gas otomatis dan sirine berbunyi di lokasi. Setelah kondisi kembali aman, tombol reset manual memulai ulang perangkat.
+            </p>
+          </div>
+
+          <!-- Feature Bullets from Slide 6 -->
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:8px;">
+            <div style="background:var(--color-slate-50); border:1px solid var(--color-slate-200); border-radius:var(--radius-md); padding:16px;">
+              <div style="font-weight:700; font-size:0.9375rem; color:var(--color-slate-900); margin-bottom:4px;">Jadwal Shift Otomatis</div>
+              <div style="font-size:0.8125rem; color:var(--color-slate-600)">Penjadwalan harian mematikan regulator saat jam tutup kios, tersimpan di memori NVS.</div>
+            </div>
+            <div style="background:var(--color-slate-50); border:1px solid var(--color-slate-200); border-radius:var(--radius-md); padding:16px;">
+              <div style="font-weight:700; font-size:0.9375rem; color:var(--color-slate-900); margin-bottom:4px;">Supervisi Klaster 10–50 Kios</div>
+              <div style="font-size:0.8125rem; color:var(--color-slate-600)">Pengelola pujasera dapat memantau puluhan stan kuliner sekaligus dari satu layar sentral.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       COMPETITIVE ADVANTAGES (SLIDE 7 DOKUMEN RESMI)
+       ======================================================================== -->
+  <section class="section section--alt" id="keunggulan">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-kicker section-kicker--teal" data-i18n="adv.kicker">NILAI UNGGUL PRODUK</span>
+        <h2 class="section-title" data-i18n="adv.title">4 Keunggulan Kompetitif SIGAS</h2>
+        <p class="section-desc" data-i18n="adv.desc">
+          Empat keunggulan yang membedakan SIGAS dari detektor gas biasa.
+        </p>
+      </div>
+
+      <div class="adv-grid">
+        <div class="adv-card">
+          <div class="adv-num">01 / TANPA RUSAK PIPA</div>
+          <h3 class="adv-title">Dipasang Begitu Saja, Tanpa Membongkar Apa Pun</h3>
+          <p class="adv-desc">
+            Alat cukup dijepit ke keran gas standar SNI tanpa memotong selang atau merombak pipa. Sertifikasi keselamatan pabrikan tetap sah, dan pelepasannya cukup pakai tangan.
+          </p>
+        </div>
+
+        <div class="adv-card">
+          <div class="adv-num">02 / TANGGUH SAAT MATI</div>
+          <h3 class="adv-title">Tetap Bekerja Walau Listrik &amp; Internet Mati</h3>
+          <p class="adv-desc">
+            Proses mendeteksi hingga menutup keran gas dilakukan di dalam alat, bukan di server internet. Jadi alat tetap bekerja walau listrik padam total atau koneksi terputus.
+          </p>
+        </div>
+
+        <div class="adv-card">
+          <div class="adv-num">03 / PANTAU MULTI-KIOS</div>
+          <h3 class="adv-title">Satu HP Bisa Memantau Banyak Kios</h3>
+          <p class="adv-desc">
+            Pengelola pujasera, sentra UMKM, atau kantin sekolah dapat memantau 10 sampai 50 kios dapur dari satu aplikasi secara serentak.
+          </p>
+        </div>
+
+        <div class="adv-card">
+          <div class="adv-num">04 / HARGA TERJANGKAU</div>
+          <h3 class="adv-title">Harga Jauh Lebih Murah dari Solusi Industri</h3>
+          <p class="adv-desc">
+            Sistem proteksi gas industri bisa mencapai belasan juta rupiah. SIGAS hanya Rp 850.000 (sekitar $55) — jauh di bawah biaya sistem industri.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       TECHNICAL SPECIFICATIONS TABLE (KODAK STYLE)
+       ======================================================================== -->
+  <section class="section" id="spesifikasi">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-kicker" data-i18n="spec.kicker">DATA SPESIFIKASI</span>
+        <h2 class="section-title" data-i18n="spec.title">Spesifikasi Teknis Perangkat</h2>
+        <p class="section-desc" data-i18n="spec.desc">
+          Rincian parameter komponen dan toleransi operasional perangkat SIGAS berdasarkan dokumen resmi.
+        </p>
+      </div>
+
+      <div class="spec-table-wrap">
+        <table class="spec-table">
+          <thead>
+            <tr>
+              <th>Komponen / Parameter</th>
+              <th>Spesifikasi Resmi</th>
+              <th>Catatan Fungsional</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="spec-param">Mikrokontroler</td>
+              <td class="spec-val">ESP32 DOIT DevKit V1 (240MHz Dual-Core)</td>
+              <td>Jantung alat; membaca sensor, mengambil keputusan, dan terhubung Wi-Fi ke aplikasi</td>
+            </tr>
+            <tr>
+              <td class="spec-param">Sensor Gas</td>
+              <td class="spec-val">Semikonduktor MQ-6 Terkalibrasi</td>
+              <td>Memantau udara 10 kali per detik; filter cerdas mencegah alarm palsu karena asap masakan</td>
+            </tr>
+            <tr>
+              <td class="spec-param">Aktuator Pemutus</td>
+              <td class="spec-val">Servo TD8120MG Logam Penuh (20 kg·cm)</td>
+              <td>Tahan air; memutar keran gas hingga tertutup dalam 0,4 detik</td>
+            </tr>
+            <tr>
+              <td class="spec-param">Pencatat Waktu (RTC)</td>
+              <td class="spec-val">DS3231 I2C dengan baterai koin cadangan</td>
+              <td>Jadwal tutup otomatis tetap tersimpan meski listrik padam</td>
+            </tr>
+            <tr>
+              <td class="spec-param">Alarm Akustik</td>
+              <td class="spec-val">12V Active Piezo High-Decibel Buzzer</td>
+              <td>Sirine berbunyi nyaring; pola bunyi berbeda untuk kondisi bocor vs pasang pertama</td>
+            </tr>
+            <tr>
+              <td class="spec-param">Kompatibilitas Tabung</td>
+              <td class="spec-val">LPG 3 kg Melon &amp; Tabung Komersial 12 kg</td>
+              <td>Dudukan modular disesuaikan dengan geometri leher tabung</td>
+            </tr>
+            <tr>
+              <td class="spec-param">Metode Pemasangan</td>
+              <td class="spec-val">100% Non-Invasive Clamp-On</td>
+              <td>Tanpa memotong selang gas, tuas manual tetap dapat dilepas cepat</td>
+            </tr>
+            <tr>
+              <td class="spec-param">Backend &amp; Mobile</td>
+              <td class="spec-val">Flutter 3 (Dart) + Firebase Realtime DB</td>
+              <td>Data kondisi gas tampil waktu-nyata; alat baru disambungkan dengan memindai kode QR</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       BUSINESS MODEL & PRICING (SLIDE 10 RESMI)
+       ======================================================================== -->
+  <section class="section section--alt" id="bisnis">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-kicker section-kicker--teal" data-i18n="biz.kicker">MODEL BISNIS &amp; DISTRIBUSI</span>
+        <h2 class="section-title" data-i18n="biz.title">Struktur Biaya &amp; Skema Layanan</h2>
+        <p class="section-desc" data-i18n="biz.desc">
+          Dua cara memakai SIGAS: beli langsung perangkatnya (kit siap pasang), atau berlangganan layanan pemantauan untuk pengelola banyak kios.
+        </p>
+      </div>
+
+      <div class="adv-grid">
+        <div class="adv-card">
+          <div class="adv-num">PENJUALAN UNIT HARDWARE (B2B)</div>
+          <h3 class="adv-title">Rp 850.000 / Kit</h3>
+          <p class="adv-desc">
+            Harga satuan kit siap pasang — sudah termasuk sensor terkalibrasi, motor pemutar keran, dan dudukan cetak 3D tahan panas. Jauh lebih murah daripada sistem proteksi gas industri yang mencapai belasan juta rupiah.
+          </p>
+          <ul style="margin-top:14px; list-style:none; display:flex; flex-direction:column; gap:8px; font-size:0.875rem; color:var(--color-slate-600);">
+            <li>✓ Perangkat aktuator robotik siap pasang</li>
+            <li>✓ Sensor MQ-6 dan modul ESP32 terkalibrasi</li>
+            <li>✓ Braket 3D plug-on tahan panas</li>
+          </ul>
+        </div>
+
+        <div class="adv-card">
+          <div class="adv-num">SAFETY-AS-A-SERVICE (SaaS)</div>
+          <h3 class="adv-title">Rp 25.000 / stan / bulan</h3>
+          <p class="adv-desc">
+            Langganan pengelolaan keamanan multi-unit khusus pengelola sentra kuliner, pujasera, dan pengelola kantin sekolah.
+          </p>
+          <ul style="margin-top:14px; list-style:none; display:flex; flex-direction:column; gap:8px; font-size:0.875rem; color:var(--color-slate-600);">
+            <li>✓ Dashboard supervisi klaster terpusat (10–50 stan)</li>
+            <li>✓ Notifikasi darurat SMS otomatis</li>
+            <li>✓ Rekomendasi kalibrasi sensor triwulanan</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       RESEARCH REFERENCES & TEAM SECTION
+       ======================================================================== -->
+  <section class="section" id="tim">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-kicker" data-i18n="team.kicker">TIM RISET &amp; INOVASI</span>
+        <h2 class="section-title" data-i18n="team.title">Pengembang SMK Telkom Purwokerto</h2>
+        <p class="section-desc" data-i18n="team.desc">
+          Inovasi yang mewakili ajang developerday.id 2026 (Road to APICTA) didukung oleh ASPILUKI dan FTII.
+        </p>
+      </div>
+
+      <div class="team-grid" style="margin-bottom:48px;">
+        <div class="team-card">
+          <img src="/assets/images/team-fabian.jpg" alt="Fabian Arkananta F" class="team-avatar">
+          <div class="team-name">Fabian Arkananta F</div>
+          <div class="team-role">Hardware &amp; IoT Lead</div>
+          <div class="team-contact">fabianarkananta8810@gmail.com</div>
+        </div>
+
+        <div class="team-card">
+          <img src="/assets/images/team-hanif.jpg" alt="Hanif Rizki Ardianto" class="team-avatar">
+          <div class="team-name">Hanif Rizki Ardianto</div>
+          <div class="team-role">Mobile App Developer</div>
+          <div class="team-contact">hanifrizkiardianto70@gmail.com</div>
+        </div>
+
+        <div class="team-card">
+          <img src="/assets/images/team-arieva.jpg" alt="Arieva Ramdhan C F" class="team-avatar">
+          <div class="team-name">Arieva Ramdhan C F</div>
+          <div class="team-role">Mechanical &amp; Firmware</div>
+          <div class="team-contact">ramdhanrieva9@gmail.com</div>
+        </div>
+
+        <div class="team-card">
+          <img src="/assets/images/team-yogi.jpg" alt="Yogi Sasongko" class="team-avatar">
+          <div class="team-name">Yogi Sasongko</div>
+          <div class="team-role">Pembimbing Riset</div>
+          <div class="team-contact">yogi@smktelkom-pwt.sch.id</div>
+        </div>
+      </div>
+
+      <!-- Official Academic References Box -->
+      <div class="reference-box">
+          <h4 style="font-size:0.9375rem; font-weight:700; margin-bottom:14px; color:var(--color-slate-900);">
+            Rujukan Ilmiah &amp; Regulasi Keselamatan Resmi:
+          </h4>
+        <ul class="reference-list">
+          <li class="reference-item">
+            <strong>Amran, A.C., Khairuhisham, K.H.S., Basar, M.F. et al. (2025):</strong> <em>'A Smart IoT Framework for Continuous Monitoring and Proactive Prevention of LPG Gas Leaks in Domestic Environments'</em>, IEEE Xplore. DOI: 10.1109/icsgrc65918.2025.11159687.
+          </li>
+          <li class="reference-item">
+            <strong>Kementerian ESDM RI (Ditjen Migas, 2020):</strong> <em>'Hindari Kecelakaan Saat Memasak, Jangan Lupa Periksa Selang dan Regulator LPG'</em>.
+          </li>
+          <li class="reference-item">
+            <strong>Mahesh, N., Pradeep, N., Srinithi, K. et al. (2025):</strong> <em>'Smart Gas Leakage Detector with Auto Cut-Off Regulator using IoT'</em>, IEEE ICSCPS. DOI: 10.1109/icscds65426.2025.11166850.
+          </li>
+          <li class="reference-item">
+            <strong>Shaputra, A., Andriani, T., Jaya, A. et al. (2023):</strong> <em>'Rancang bangun alat pendeteksi kebocoran gas LPG berbasis Internet of Things (IoT) dengan penutup katup otomatis menggunakan motor servo'</em>, ALTRON, 2(2).
+          </li>
+          <li class="reference-item">
+            <strong>Valencia, V., Purnama, L.P., Tjong, C. et al. (2022):</strong> <em>'Rancang bangun alat pendeteksi kebocoran gas LPG berbasis Internet of Things dengan katup regulator otomatis'</em>, Techne, 21(2).
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       CTA BANNER
+       ======================================================================== -->
+  <section class="section" style="padding-top:20px;">
+    <div class="container">
+      <div class="cta-banner">
+        <span class="section-kicker" style="background:rgba(255,255,255,0.15); color:#5EEAD4; border-color:rgba(255,255,255,0.25);">
+          KOLABORASI &amp; UJI COBA PILOT
+        </span>
+        <h2 class="section-title">Wujudkan Dapur Kuliner yang Aman Bersama SIGAS</h2>
+        <p class="section-desc">
+          Tertarik melakukan pengujian pilot unit di sentra kuliner, pujasera, kantin sekolah, atau dinas UMKM Anda? Hubungi tim peneliti kami untuk koordinasi demonstrasi.
+        </p>
+        <div class="cta-btns">
+          <button type="button" class="btn btn--teal" id="btnCtaOpenModal">
+            Hubungi Tim Peneliti SIGAS
+          </button>
+          <a href="#spesifikasi" class="btn btn--outline-white">
+            Lihat Tabel Spesifikasi
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       MODAL DIALOG
+       ======================================================================== -->
+  <div class="modal-overlay" id="consultationModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-box">
+      <button type="button" class="modal-close" id="btnCloseModal" aria-label="Tutup Formulir">✕</button>
+      <h3 class="modal-title" id="modalTitle">Hubungi Tim Peneliti SIGAS</h3>
+      <p class="modal-desc">
+        Kirim pesan atau permohonan demonstrasi prototipe TRL 6 kepada tim pengembang SMK Telkom Purwokerto.
+      </p>
+
+      <form class="modal-form" id="consultationForm">
+        <div class="form-group">
+          <label for="formName" class="form-label">Nama Lengkap:</label>
+          <input type="text" id="formName" class="form-input" required placeholder="Nama Anda">
+        </div>
+
+        <div class="form-group">
+          <label for="formOrg" class="form-label">Instansi / Usaha:</label>
+          <input type="text" id="formOrg" class="form-input" required placeholder="Pengelola Food Court / Dinas UMKM / Sekolah">
+        </div>
+
+        <div class="form-group">
+          <label for="formContact" class="form-label">WhatsApp / Email:</label>
+          <input type="text" id="formContact" class="form-input" required placeholder="08xxxxxxxxxx / nama@email.com">
+        </div>
+
+        <div class="form-group">
+          <label for="formNotes" class="form-label">Pesan / Lokasi Kios:</label>
+          <textarea id="formNotes" class="form-textarea" rows="2" placeholder="Pertanyaan teknis atau minat uji coba..."></textarea>
+        </div>
+
+        <button type="submit" class="btn btn--primary" style="width:100%; margin-top:8px;">
+          Kirim Pesan
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       FOOTER (LIVENTO-STYLE WATERMARK)
+       ======================================================================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="/assets/images/sigas-logo-full.png" alt="Logo SIGAS" class="nav-logo-img">
+          <p class="footer-desc">
+            Alat pemutus gas otomatis untuk keran LPG — terpasang tanpa merusak pipa, dilengkapi aplikasi pemantauan untuk warung, pujasera, dan kantin.
+          </p>
+          <div class="footer-partners">
+            <img src="/assets/images/logo-developerday-apicta.png" alt="developerday.id 2026 Road to APICTA" class="partner-logo">
+            <img src="/assets/images/logo-aspiluki-ftii.png" alt="ASPILUKI &amp; FTII" class="partner-logo">
+          </div>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Navigasi Halaman</h4>
+          <ul class="footer-links">
+            <li><a href="#masalah">Masalah Lapangan</a></li>
+            <li><a href="#solusi">Solusi &amp; Cara Kerja</a></li>
+            <li><a href="#hardware">Desain CAD Hardware</a></li>
+            <li><a href="#aplikasi">Aplikasi Mobile Flutter</a></li>
+            <li><a href="#keunggulan">Keunggulan Produk</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Spesifikasi &amp; Bisnis</h4>
+          <ul class="footer-links">
+            <li><a href="#spesifikasi">Spesifikasi Komponen</a></li>
+            <li><a href="#bisnis">Model Biaya &amp; SaaS</a></li>
+            <li><a href="#tim">Tim Peneliti</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Institusi Riset</h4>
+          <ul class="footer-links">
+            <li style="color:var(--color-slate-400);">SMK Telkom Purwokerto</li>
+            <li style="color:var(--color-slate-400);">Purwokerto, Jawa Tengah</li>
+            <li><a href="mailto:yogi@smktelkom-pwt.sch.id">yogi@smktelkom-pwt.sch.id</a></li>
+            <li><a href="tel:+6281210763886">+62 812-1076-3886</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>
+          &copy; 2026 SIGAS Project — Tim Riset SMK Telkom Purwokerto. All rights reserved.
+        </div>
+        <div class="footer-disclaimer">
+          <strong>Catatan Kesiapan:</strong> SIGAS saat ini berada pada tahap Prototipe TRL 6. Seluruh klaim performa mengacu pada hasil pengujian laboratorium dan survei lapangan di Purwokerto Selatan.
+        </div>
+      </div>
+
+      <!-- Livento-style Bottom Watermark -->
+      <div class="footer-watermark">SIGAS</div>
+    </div>
+  </footer>
+
+  <!-- Main JavaScript -->
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
